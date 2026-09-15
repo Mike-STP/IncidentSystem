@@ -1,5 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/IncidentSystem.Api/IncidentSystem.Api.csproj" />
+    <Project Path="src/Logging.Api/Logging.Api.csproj" />
+    <Project Path="src/UserAuthentication.Api/UserAuthentication.Api.csproj" />
   </Folder>
 </Solution>
