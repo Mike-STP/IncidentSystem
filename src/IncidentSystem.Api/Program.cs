@@ -1,3 +1,4 @@
+using Scalar.AspNetCore;
 
 namespace IncidentSystem.Api;
 
@@ -19,6 +20,7 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+            app.MapScalarApiReference();
         }
 
         app.UseHttpsRedirection();
