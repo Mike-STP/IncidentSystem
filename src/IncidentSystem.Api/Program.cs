@@ -1,4 +1,5 @@
 using Scalar.AspNetCore;
+using IncidentSystem.Api.Services;
 
 namespace IncidentSystem.Api;
 
@@ -11,6 +12,8 @@ public class Program
         // Add services to the container.
 
         builder.Services.AddControllers();
+        builder.Services.AddScoped<IncidentService>();
+
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
