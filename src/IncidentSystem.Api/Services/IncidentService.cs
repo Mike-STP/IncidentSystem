@@ -1,29 +1,36 @@
+using IncidentSystem.Api.Data;
 using IncidentSystem.Api.Models;
+
 namespace IncidentSystem.Api.Services;
 
 public class IncidentService
 {
-    private readonly List<Incident> incidents = new();
+    private readonly IncidentDbContext context;
+
+    public IncidentService(IncidentDbContext context)
+    {
+        this.context = context;
+    }
 
     public List<Incident> GetAll()
     {
-        return incidents;
+        return context.Incidents.ToList();
     }
 
     public Incident? GetById(int id)
     {
-        return incidents.FirstOrDefault(i => i.Id == id);
+        return context.Incidents.FirstOrDefault(i => i.Id == id);
     }
 
     public Incident Create(Incident incident)
     {
-        incident.Id = incidents.Count + 1;
         incident.CreatedAt = DateTime.Now;
         incident.UpdatedAt = DateTime.Now;
         incident.Status = IncidentStatus.Open;
         incident.Escalation = EscalationLevel.None;
 
-        incidents.Add(incident);
+        context.Incidents.Add(incident);
+        context.SaveChanges();
 
         return incident;
     }
@@ -45,6 +52,8 @@ public class IncidentService
         incident.Assignee = updatedIncident.Assignee;
         incident.UpdatedAt = DateTime.Now;
 
+        context.SaveChanges();
+
         return incident;
     }
 
@@ -59,6 +68,8 @@ public class IncidentService
 
         incident.Status = IncidentStatus.Closed;
         incident.UpdatedAt = DateTime.Now;
+
+        context.SaveChanges();
 
         return true;
     }
@@ -86,6 +97,8 @@ public class IncidentService
         }
 
         incident.UpdatedAt = DateTime.Now;
+
+        context.SaveChanges();
 
         return true;
     }

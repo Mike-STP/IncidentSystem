@@ -1,5 +1,7 @@
 using Scalar.AspNetCore;
 using IncidentSystem.Api.Services;
+using IncidentSystem.Api.Data;
+using Microsoft.EntityFrameworkCore;    
 
 namespace IncidentSystem.Api;
 
@@ -13,6 +15,8 @@ public class Program
 
         builder.Services.AddControllers();
         builder.Services.AddScoped<IncidentService>();
+        builder.Services.AddDbContext<IncidentDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IncidentDatabase")));
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
