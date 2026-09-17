@@ -10,21 +10,38 @@ namespace IncidentSystem.Api.Controllers;
 public class IncidentsController : ControllerBase
 {
     private readonly IncidentService incidentService;
+    private readonly SessionService incidentSessionService;
 
-    public IncidentsController(IncidentService incidentService)
+    public IncidentsController(
+        IncidentService incidentService,
+        SessionService incidentSessionService)
     {
         this.incidentService = incidentService;
+        this.incidentSessionService = incidentSessionService;
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAll(
+        [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
+        if (!incidentSessionService.IsAdmin(sessionId))
+        {
+            return StatusCode(403);
+        }
+
         return Ok(incidentService.GetAll());
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public IActionResult GetById(
+        int id,
+        [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
+        if (!incidentSessionService.IsAdmin(sessionId))
+        {
+            return StatusCode(403);
+        }
+
         Incident? incident = incidentService.GetById(id);
 
         if (incident == null)
@@ -36,8 +53,15 @@ public class IncidentsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(Incident incident)
+    public IActionResult Create(
+        Incident incident,
+        [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
+        if (!incidentSessionService.SessionExists(sessionId))
+        {
+            return StatusCode(403);
+        }
+
         Incident createdIncident = incidentService.Create(incident);
 
         return CreatedAtAction(
@@ -47,8 +71,16 @@ public class IncidentsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Incident incident)
+    public IActionResult Update(
+        int id,
+        Incident incident,
+        [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
+        if (!incidentSessionService.IsAdmin(sessionId))
+        {
+            return StatusCode(403);
+        }
+
         Incident? updatedIncident = incidentService.Update(id, incident);
 
         if (updatedIncident == null)
@@ -60,8 +92,15 @@ public class IncidentsController : ControllerBase
     }
 
     [HttpPut("{id}/close")]
-    public IActionResult Close(int id)
+    public IActionResult Close(
+        int id,
+        [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
+        if (!incidentSessionService.IsAdmin(sessionId))
+        {
+            return StatusCode(403);
+        }
+
         bool closed = incidentService.Close(id);
 
         if (!closed)
@@ -73,11 +112,18 @@ public class IncidentsController : ControllerBase
     }
 
     [HttpPut("{id}/escalate")]
-    public IActionResult Escalate(int id)
+    public IActionResult Escalate(
+        int id,
+        [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
-        bool escalated = incidentService.Escalate(id);
+        if (!incidentSessionService.IsAdmin(sessionId))
+        {
+            return StatusCode(403);
+        }
 
-        if (!escalated)
+        bool success = incidentService.Escalate(id);
+
+        if (!success)
         {
             return NotFound();
         }

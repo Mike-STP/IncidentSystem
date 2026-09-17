@@ -39,11 +39,13 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(User user, [FromHeader(Name = "X-Session-Id")] string sessionId)
+    public IActionResult Create(User user)
     {
+        string? sessionId = Request.Headers["X-Session-Id"].FirstOrDefault();
+
         if (!sessionService.IsAdmin(sessionId))
         {
-            return StatusCode(403, "Only admins can create new users.");
+            return StatusCode(403);
         }
 
         User createdUser = userService.Create(user);
