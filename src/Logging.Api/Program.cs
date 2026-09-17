@@ -13,6 +13,17 @@ public class Program
         // Add services to the container.
 
         builder.Services.AddControllers();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("Frontend", policy =>
+            {
+                policy
+                    .WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
         builder.Services.AddScoped<LoggingService>();
         builder.Services.AddSingleton<IConnectionMultiplexer>(
     ConnectionMultiplexer.Connect("localhost:6379"));
@@ -20,6 +31,7 @@ public class Program
         builder.Services.AddOpenApi();
 
         var app = builder.Build();
+        app.UseCors("Frontend");
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
