@@ -57,4 +57,25 @@ public class UserController : ControllerBase
 
         return Ok(updatedUser);
     }
+
+    [HttpPost("login")]
+    public IActionResult Login(LoginRequest request)
+    {
+        User? user = userService.Login(
+            request.Username,
+            request.Password);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        return Ok(new
+        {
+            user.Id,
+            user.Username,
+            user.Email,
+            user.Role
+        });
+    }
 }
