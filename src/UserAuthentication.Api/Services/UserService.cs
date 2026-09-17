@@ -49,6 +49,23 @@ public class UserService
         user.Email = updatedUser.Email;
         user.Password = passwordHasher.HashPassword(user, updatedUser.Password);
         user.Role = updatedUser.Role;
+        user.IsActive = updatedUser.IsActive;
+
+        context.SaveChanges();
+
+        return user;
+    }
+
+    public User? ChangeStatus(int id, bool isActive)
+    {
+        User? user = GetById(id);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        user.IsActive = isActive;
 
         context.SaveChanges();
 
@@ -60,6 +77,10 @@ public class UserService
         User? user = context.Users.FirstOrDefault(u => u.Username == username);
 
         if (user == null)
+        {
+            return null;
+        }
+        if (!user.IsActive)
         {
             return null;
         }

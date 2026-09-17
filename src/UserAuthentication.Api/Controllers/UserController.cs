@@ -9,10 +9,14 @@ namespace UserAuthentication.Api.Controllers;
 public class UserController : ControllerBase
 {
     private readonly UserService userService;
+    private readonly SessionService sessionService;
 
-    public UserController(UserService userService)
+    public UserController(
+        UserService userService,
+        SessionService sessionService)
     {
         this.userService = userService;
+        this.sessionService = sessionService;
     }
 
     [HttpGet]
@@ -35,8 +39,13 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(User user)
+    public IActionResult Create(User user, [FromHeader(Name = "X-Session-Id")] string sessionId)
     {
+        if (!sessionService.IsAdmin(sessionId))
+        {
+            return StatusCode(403, "Only admins can create new users.");
+        }
+
         User createdUser = userService.Create(user);
 
         return CreatedAtAction(
@@ -58,6 +67,28 @@ public class UserController : ControllerBase
         return Ok(updatedUser);
     }
 
+    [HttpPut("{id}/status")]
+    public IActionResult ChangeStatus(
+    int id,
+    bool isActive)
+    {
+    string? sessionId = Request.Headers["X-Session-Id"].FirstOrDefault();
+    
+        if (!sessionService.IsAdmin(sessionId))
+        {
+            return StatusCode(403);
+        }
+
+        User? user = userService.ChangeStatus(id, isActive);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(user);
+    }
+
     [HttpPost("login")]
     public IActionResult Login(LoginRequest request)
     {
@@ -70,12 +101,18 @@ public class UserController : ControllerBase
             return Unauthorized();
         }
 
+        string sessionId = sessionService.CreateSession(
+            user.Id,
+            user.Username,
+            user.Role.ToString());
+
         return Ok(new
         {
             user.Id,
             user.Username,
             user.Email,
-            user.Role
+            user.Role,
+            sessionId
         });
     }
 }
