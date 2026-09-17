@@ -1,27 +1,66 @@
 using Logging.Api.Models;
+using StackExchange.Redis;
+using System.Text.Json;
 
 namespace Logging.Api.Services;
 
 public class LoggingService
 {
-    private readonly List<LogEntry> logs = new();
+    private readonly IDatabase database;
+
+    public LoggingService(IConnectionMultiplexer redis)
+    {
+        database = redis.GetDatabase();
+    }
 
     public List<LogEntry> GetAll()
     {
+        List<LogEntry> logs = new();
+
+        RedisValue[] entries = database.ListRange("logs");
+
+        foreach (RedisValue entry in entries)
+        {
+            LogEntry? log = JsonSerializer.Deserialize<LogEntry>(
+                entry.ToString());
+
+            if (log != null)
+            {
+                logs.Add(log);
+            }
+        }
+
         return logs;
     }
 
     public LogEntry? GetById(int id)
     {
-        return logs.FirstOrDefault(l => l.Id == id);
+        RedisValue[] entries = database.ListRange("logs");
+
+        foreach (RedisValue entry in entries)
+        {
+            LogEntry? log = JsonSerializer.Deserialize<LogEntry>(
+                entry.ToString());
+
+            if (log != null && log.Id == id)
+            {
+                return log;
+            }
+        }
+
+        return null;
     }
 
     public LogEntry Create(LogEntry log)
     {
-        log.Id = logs.Count + 1;
+        RedisValue[] entries = database.ListRange("logs");
+
+        log.Id = entries.Length + 1;
         log.Timestamp = DateTime.UtcNow;
 
-        logs.Add(log);
+        string json = JsonSerializer.Serialize(log);
+
+        database.ListRightPush("logs", json);
 
         return log;
     }

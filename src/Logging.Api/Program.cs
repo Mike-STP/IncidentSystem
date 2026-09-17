@@ -1,5 +1,6 @@
 using Scalar.AspNetCore;
 using Logging.Api.Services;
+using StackExchange.Redis;
 
 namespace Logging.Api;
 
@@ -13,6 +14,8 @@ public class Program
 
         builder.Services.AddControllers();
         builder.Services.AddScoped<LoggingService>();
+        builder.Services.AddSingleton<IConnectionMultiplexer>(
+    ConnectionMultiplexer.Connect("localhost:6379"));
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
