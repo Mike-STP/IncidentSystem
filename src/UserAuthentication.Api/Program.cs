@@ -1,5 +1,7 @@
 using Scalar.AspNetCore;
 using UserAuthentication.Api.Services;
+using UserAuthentication.Api.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace UserAuthentication.Api;
 
@@ -13,6 +15,9 @@ public class Program
 
         builder.Services.AddControllers();
         builder.Services.AddScoped<UserService>();
+        builder.Services.AddDbContext<UserDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("UserDatabase")));
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 

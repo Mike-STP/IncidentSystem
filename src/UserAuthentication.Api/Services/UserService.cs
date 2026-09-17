@@ -1,26 +1,32 @@
+using Microsoft.EntityFrameworkCore;
+using UserAuthentication.Api.Data;
 using UserAuthentication.Api.Models;
 
 namespace UserAuthentication.Api.Services;
 
 public class UserService
 {
-    private readonly List<User> users = new();
+    private readonly UserDbContext context;
+
+    public UserService(UserDbContext context)
+    {
+        this.context = context;
+    }
 
     public List<User> GetAll()
     {
-        return users;
+        return context.Users.ToList();
     }
 
     public User? GetById(int id)
     {
-        return users.FirstOrDefault(u => u.Id == id);
+        return context.Users.FirstOrDefault(u => u.Id == id);
     }
 
     public User Create(User user)
     {
-        user.Id = users.Count + 1;
-
-        users.Add(user);
+        context.Users.Add(user);
+        context.SaveChanges();
 
         return user;
     }
@@ -38,6 +44,8 @@ public class UserService
         user.Email = updatedUser.Email;
         user.Password = updatedUser.Password;
         user.Role = updatedUser.Role;
+
+        context.SaveChanges();
 
         return user;
     }
