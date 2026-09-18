@@ -32,7 +32,7 @@ public class Program
                 builder.Configuration.GetConnectionString("IncidentDatabase")));
 
         builder.Services.AddSingleton<IConnectionMultiplexer>(
-            ConnectionMultiplexer.Connect("localhost:6379"));
+            ConnectionMultiplexer.Connect("incident-redis:6379"));
 
         builder.Services.AddScoped<SessionService>();
 

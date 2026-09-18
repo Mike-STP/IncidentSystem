@@ -26,7 +26,7 @@ public class Program
         });
         builder.Services.AddScoped<LoggingService>();
         builder.Services.AddSingleton<IConnectionMultiplexer>(
-    ConnectionMultiplexer.Connect("localhost:6379"));
+    ConnectionMultiplexer.Connect("incident-redis:6379"));
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 

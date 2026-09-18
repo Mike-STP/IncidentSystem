@@ -1,0 +1,100 @@
+services:
+
+  incident-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: incident-sqlserver
+    platform: linux/amd64
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Example123!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - incident-sqlserver-data:/var/opt/mssql
+    networks:
+      - incident-network
+
+  user-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: user-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Example123!"
+    ports:
+      - "1434:1433"
+    volumes:
+      - user-sqlserver-data:/var/opt/mssql
+    networks:
+      - user-network
+
+  incident-redis:
+    image: redis:latest
+    container_name: incident-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - incident-network
+      - user-network
+      - logging-network
+
+  incident-api:
+    build:
+      context: ./src/IncidentSystem.Api
+      dockerfile: Dockerfile
+    container_name: incident-api
+    ports:
+      - "5220:8080"
+    depends_on:
+      - incident-sqlserver
+      - incident-redis
+    networks:
+      - incident-network
+
+  user-auth-api:
+    build:
+      context: ./src/UserAuthentication.Api
+      dockerfile: Dockerfile
+    container_name: user-auth-api
+    ports:
+      - "5053:8080"
+    depends_on:
+      - user-sqlserver
+      - incident-redis
+    networks:
+      - user-network
+
+  logging-api:
+    build:
+      context: ./src/Logging.Api
+      dockerfile: Dockerfile
+    container_name: logging-api
+    ports:
+      - "5231:8080"
+    depends_on:
+      - incident-redis
+    networks:
+      - logging-network
+
+  frontend:
+    build:
+      context: ./src/IncidentSystem.Frontend
+      dockerfile: Dockerfile
+    container_name: incident-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - incident-api
+      - user-auth-api
+      - logging-api
+    networks:
+      - frontend-network
+
+volumes:
+  incident-sqlserver-data:
+  user-sqlserver-data:
+
+networks:
+  incident-network:
+  user-network:
+  logging-network:
+  frontend-network:

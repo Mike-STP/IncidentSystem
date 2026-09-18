@@ -1,6 +1,8 @@
 using Scalar.AspNetCore;
 using UserAuthentication.Api.Services;
 using UserAuthentication.Api.Data;
+using UserAuthentication.Api.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
@@ -15,6 +17,7 @@ public class Program
         // Add services to the container.
 
         builder.Services.AddControllers();
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("Frontend", policy =>
@@ -28,16 +31,48 @@ public class Program
 
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<SessionService>();
-        builder.Services.AddDbContext<UserDbContext>(options => options.UseSqlServer(
-        builder.Configuration.GetConnectionString("UserDatabase")));
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+        builder.Services.AddDbContext<UserDbContext>(options =>
+            options.UseSqlServer(
+                builder.Configuration.GetConnectionString("UserDatabase")));
+
         builder.Services.AddOpenApi();
-        builder.Services.AddSingleton<IConnectionMultiplexer>( ConnectionMultiplexer.Connect("localhost:6379"));
+
+        builder.Services.AddSingleton<IConnectionMultiplexer>(
+            ConnectionMultiplexer.Connect("incident-redis:6379"));
 
         var app = builder.Build();
+
         app.UseCors("Frontend");
 
+        // Create initial admin if the database contains no users.
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+
+            if (!dbContext.Users.Any())
+            {
+                var admin = new User
+                {
+                    Username = "admin",
+                    Email = "admin@example.com",
+                    Role = UserRole.Admin,
+                    IsActive = true
+                };
+
+                var passwordHasher = new PasswordHasher<User>();
+
+                admin.Password = passwordHasher.HashPassword(
+                    admin,
+                    "Admin123!");
+
+                dbContext.Users.Add(admin);
+                dbContext.SaveChanges();
+            }
+        }
+
         // Configure the HTTP request pipeline.
+
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
@@ -47,7 +82,6 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
