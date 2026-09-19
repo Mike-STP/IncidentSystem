@@ -2,6 +2,24 @@
 
 # IncidentSystem
 
+## Installation
+
+### 1. Clone the repository
+
+Clone the project repository from GitHub:
+
+```text
+git clone https://github.com/Mike-STP/IncidentSystem.git
+```
+
+After cloning, change into the project directory:
+
+```text
+cd IncidentSystem
+```
+
+The project is now available locally. The application can be started using Docker Compose as described in the [First Steps](#first-steps) section.
+
 ## First-Time Setup & Usage
 
 ### 1. Start the application
