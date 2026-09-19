@@ -16,6 +16,8 @@
 ## SAST - Semgrep
 
 ```text
+
+docker run --rm -v "$(pwd):/src" returntocorp/semgrep semgrep --config auto
 ┌─────────────┐
 │ Scan Status │
 └─────────────┘
