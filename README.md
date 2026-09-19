@@ -6,7 +6,7 @@
 
 ### 1. Start the application
 
-Make sure Docker Desktop is running and open a terminal in the root directory of the project.
+Make sure Docker is running and open a terminal in the root directory of the project.
 
 Start the application with:
 
