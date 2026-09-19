@@ -76,6 +76,19 @@ To start the application again:
 docker compose up -d
 ```
 
+## Services Overview
+
+Once the application has been started successfully, the following services are running:
+
+| Service | Purpose | Access |
+|---|---|---|
+| Frontend | Main web interface for the Incident Management System. | `http://localhost:5173` |
+| Incident API | Handles security incident management. | `http://localhost:5220` |
+| User Authentication API | Handles user management, authentication and sessions. | `http://localhost:5053` |
+| Logging API | Handles application logging. | `http://localhost:5231` |
+| Incident SQL Server | Stores incident-related data in the relational database. | `localhost:1433` |
+| User SQL Server | Stores user-related data in the relational database. | `localhost:1434` |
+| Redis | Stores sessions and application log data. | `localhost:6379` |
 
 
 
