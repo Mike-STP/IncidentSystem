@@ -14,8 +14,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-
         builder.Services.AddControllers();
 
         builder.Services.AddCors(options =>
@@ -45,7 +43,6 @@ public class Program
 
         app.UseCors("Frontend");
 
-        // Create initial admin if the database contains no users.
         using (var scope = app.Services.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
@@ -71,7 +68,6 @@ public class Program
             }
         }
 
-        // Configure the HTTP request pipeline.
 
         if (app.Environment.IsDevelopment())
         {

@@ -10,7 +10,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
 
         builder.Services.AddControllers();
 
@@ -25,15 +24,12 @@ public class Program
             });
         });
         builder.Services.AddScoped<LoggingService>();
-        builder.Services.AddSingleton<IConnectionMultiplexer>(
-    ConnectionMultiplexer.Connect("incident-redis:6379"));
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+        builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("incident-redis:6379"));
         builder.Services.AddOpenApi();
 
         var app = builder.Build();
         app.UseCors("Frontend");
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
