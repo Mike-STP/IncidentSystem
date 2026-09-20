@@ -18,7 +18,7 @@ After cloning, change into the project directory:
 cd IncidentSystem
 ```
 
-The project is now available locally. The application can be started using Docker Compose as described in the [First Steps](#first-steps) section.
+The project is now available locally. The application can be started using Docker Compose as described in the following section.
 
 ## First-Time Setup & Usage
 
