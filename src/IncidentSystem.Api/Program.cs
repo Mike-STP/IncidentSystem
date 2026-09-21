@@ -36,6 +36,11 @@ public class Program
 
         builder.Services.AddScoped<SessionService>();
 
+        builder.Services.AddHttpClient("LoggingApi", client =>
+        {
+            client.BaseAddress = new Uri("http://logging-api:8080");
+        });
+
         builder.Services.AddOpenApi();
 
         var app = builder.Build();

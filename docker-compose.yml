@@ -49,6 +49,7 @@ services:
       - incident-redis
     networks:
       - incident-network
+      - logging-network
 
   user-auth-api:
     build:

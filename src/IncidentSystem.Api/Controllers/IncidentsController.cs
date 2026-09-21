@@ -6,18 +6,20 @@ namespace IncidentSystem.Api.Controllers;
 
 [ApiController]
 [Route("api/incidents")]
-
 public class IncidentsController : ControllerBase
 {
     private readonly IncidentService incidentService;
     private readonly SessionService incidentSessionService;
+    private readonly IHttpClientFactory httpClientFactory;
 
     public IncidentsController(
         IncidentService incidentService,
-        SessionService incidentSessionService)
+        SessionService incidentSessionService,
+        IHttpClientFactory httpClientFactory)
     {
         this.incidentService = incidentService;
         this.incidentSessionService = incidentSessionService;
+        this.httpClientFactory = httpClientFactory;
     }
 
     [HttpGet]
@@ -53,7 +55,7 @@ public class IncidentsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(
+    public async Task<IActionResult> Create(
         Incident incident,
         [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
@@ -63,6 +65,17 @@ public class IncidentsController : ControllerBase
         }
 
         Incident createdIncident = incidentService.Create(incident);
+
+        var loggingClient = httpClientFactory.CreateClient("LoggingApi");
+
+        var logEntry = new
+        {
+            Level = "INFO",
+            Message = $"Incident #{createdIncident.Id} wurde erstellt.",
+            Source = "IncidentSystem.Api"
+        };
+
+        await loggingClient.PostAsJsonAsync("api/logs", logEntry);
 
         return CreatedAtAction(
             nameof(GetById),
