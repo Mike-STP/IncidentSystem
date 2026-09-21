@@ -81,7 +81,7 @@ services:
       dockerfile: Dockerfile
     container_name: incident-frontend
     ports:
-      - "5173:80"
+      - "5173:8080"
     depends_on:
       - incident-api
       - user-auth-api
