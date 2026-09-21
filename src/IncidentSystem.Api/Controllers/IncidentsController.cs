@@ -26,7 +26,7 @@ public class IncidentsController : ControllerBase
     public IActionResult GetAll(
         [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
-        if (!incidentSessionService.IsAdmin(sessionId))
+        if (!incidentSessionService.SessionExists(sessionId))
         {
             return StatusCode(403);
         }
@@ -39,7 +39,7 @@ public class IncidentsController : ControllerBase
         int id,
         [FromHeader(Name = "X-Session-Id")] string? sessionId)
     {
-        if (!incidentSessionService.IsAdmin(sessionId))
+        if (!incidentSessionService.SessionExists(sessionId))
         {
             return StatusCode(403);
         }

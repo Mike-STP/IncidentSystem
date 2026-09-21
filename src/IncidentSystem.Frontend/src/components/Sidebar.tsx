@@ -1,6 +1,5 @@
 import {
   Activity,
-  AlertTriangle,
   FileWarning,
   LayoutDashboard,
   LogOut,
@@ -78,24 +77,14 @@ function Sidebar({
           <FileWarning size={18} />
           <span>Incidents</span>
         </button>
-
-        <button
-          className="nav-item"
-          onClick={() =>
-            onNavigate("incidents")
-          }
-        >
-          <AlertTriangle size={18} />
-          <span>Escalations</span>
-        </button>
       </div>
 
-      <div className="nav-section">
-        <div className="nav-label">
-          MANAGEMENT
-        </div>
+      {isAdmin && (
+        <div className="nav-section">
+          <div className="nav-label">
+            MANAGEMENT
+          </div>
 
-        {isAdmin && (
           <button
             className={`nav-item ${
               currentPage === "users"
@@ -109,22 +98,22 @@ function Sidebar({
             <Users size={18} />
             <span>Users</span>
           </button>
-        )}
 
-        <button
-          className={`nav-item ${
-            currentPage === "logs"
-              ? "active"
-              : ""
-          }`}
-          onClick={() =>
-            onNavigate("logs")
-          }
-        >
-          <Activity size={18} />
-          <span>System Logs</span>
-        </button>
-      </div>
+          <button
+            className={`nav-item ${
+              currentPage === "logs"
+                ? "active"
+                : ""
+            }`}
+            onClick={() =>
+              onNavigate("logs")
+            }
+          >
+            <Activity size={18} />
+            <span>System Logs</span>
+          </button>
+        </div>
+      )}
 
       <div className="sidebar-bottom">
         <button className="nav-item">

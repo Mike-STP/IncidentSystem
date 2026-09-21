@@ -22,12 +22,8 @@ function DashboardPage({
   isAdmin,
   onNavigate,
 }: DashboardPageProps) {
-  const [incidents, setIncidents] = useState<
-    Incident[]
-  >([]);
-
-  const [incidentError, setIncidentError] =
-    useState("");
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [incidentError, setIncidentError] = useState("");
 
   useEffect(() => {
     async function loadIncidents() {
@@ -58,9 +54,7 @@ function DashboardPage({
     (incident) => incident.escalation > 0
   ).length;
 
-  function getSeverityLabel(
-    severity: number
-  ) {
+  function getSeverityLabel(severity: number) {
     switch (severity) {
       case 0:
         return "Low";
@@ -205,7 +199,13 @@ function DashboardPage({
         </div>
       </div>
 
-      <div className="dashboard-grid">
+      <div
+        className={
+          isAdmin
+            ? "dashboard-grid"
+            : "dashboard-grid user-dashboard-grid"
+        }
+      >
         <section className="panel incidents-panel">
           <div className="panel-header">
             <div>
@@ -307,40 +307,42 @@ function DashboardPage({
           )}
         </section>
 
-        <section className="panel activity-panel">
-          <div className="panel-header">
-            <div>
-              <h2>System Activity</h2>
+        {isAdmin && (
+          <section className="panel activity-panel">
+            <div className="panel-header">
+              <div>
+                <h2>System Activity</h2>
 
-              <p>
-                Recent security events
-              </p>
+                <p>
+                  Recent security events
+                </p>
+              </div>
+
+              <button
+                className="text-button"
+                type="button"
+                onClick={() =>
+                  onNavigate("logs")
+                }
+              >
+                View all
+              </button>
             </div>
 
-            <button
-              className="text-button"
-              type="button"
-              onClick={() =>
-                onNavigate("logs")
-              }
-            >
-              View all
-            </button>
-          </div>
+            <div className="empty-state small">
+              <Activity size={25} />
 
-          <div className="empty-state small">
-            <Activity size={25} />
+              <strong>
+                System activity
+              </strong>
 
-            <strong>
-              System activity
-            </strong>
-
-            <span>
-              Open System Logs to view recent
-              events.
-            </span>
-          </div>
-        </section>
+              <span>
+                Open System Logs to view recent
+                events.
+              </span>
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
