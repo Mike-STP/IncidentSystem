@@ -29,7 +29,7 @@ Make sure Docker is running and open a terminal in the root directory of the pro
 Start the application with:
 
 ```
-docker compose up -d --build
+docker compose up -d 
 ```
 
 This builds the required Docker images and starts the complete application environment.
