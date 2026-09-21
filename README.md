@@ -2,11 +2,12 @@
 
 # IncidentSystem
 
-[![Version](https://badgen.net/badge/version/1.0.0/blue)](https://github.com/Mike-STP/IncidentSystem)
-[![Docker](https://badgen.net/badge/docker/ready/blue)](https://www.docker.com/)
-[![.NET](https://badgen.net/badge/.NET/ASP.NET%20Core/blue)](https://dotnet.microsoft.com/)
-[![License](https://badgen.net/badge/license/TBD/grey)](https://github.com/Mike-STP/IncidentSystem)
-[![SAST](https://badgen.net/badge/SAST/Semgrep/green)](https://semgrep.dev/)
+[![Version](https://badgen.net/badge/version/1.0.0/blue)](https://github.com/Mike-STP/IncidentSystem#version)
+[![Docker](https://badgen.net/badge/docker/compose/blue)](https://github.com/Mike-STP/IncidentSystem/blob/main/docker-compose.yml)
+[![SAST](https://badgen.net/badge/SAST/Semgrep/green)](https://github.com/Mike-STP/IncidentSystem#sast---semgrep)
+[![Incident API](https://badgen.net/badge/API/Incident/blue)](https://github.com/Mike-STP/IncidentSystem/tree/main/src/IncidentSystem.Api)
+[![User API](https://badgen.net/badge/API/User%20Authentication/blue)](https://github.com/Mike-STP/IncidentSystem/tree/main/src/UserAuthentication.Api)
+[![Logging API](https://badgen.net/badge/API/Logging/blue)](https://github.com/Mike-STP/IncidentSystem/tree/main/src/Logging.Api)
 
 ## Installation
 
