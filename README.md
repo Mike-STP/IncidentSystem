@@ -2,6 +2,12 @@
 
 # IncidentSystem
 
+[![Version](https://badgen.net/badge/version/1.0.0/blue)](https://github.com/Mike-STP/IncidentSystem)
+[![Docker](https://badgen.net/badge/docker/ready/blue)](https://www.docker.com/)
+[![.NET](https://badgen.net/badge/.NET/ASP.NET%20Core/blue)](https://dotnet.microsoft.com/)
+[![License](https://badgen.net/badge/license/TBD/grey)](https://github.com/Mike-STP/IncidentSystem)
+[![SAST](https://badgen.net/badge/SAST/Semgrep/green)](https://semgrep.dev/)
+
 ## Installation
 
 ### 1. Clone the repository
@@ -137,18 +143,8 @@ Once the application has been started successfully, the following services are r
 | Redis | Stores sessions and application log data. | `localhost:6379` |
 
 
-## Architecture
-### Platzhalter
-Platzhalter
-
 ## ER Diagram
-### Platzhalter
-Platzhalter
-
-## Class Diagramm
-### Platzhalter
-Platzhalter
-
+<img width="629" height="315" alt="image" src="https://github.com/user-attachments/assets/b8cbdc23-c003-42d2-b6f3-b7b307d130cd" />
 
 
 ## SAST - Semgrep
