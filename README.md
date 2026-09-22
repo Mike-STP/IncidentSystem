@@ -111,7 +111,7 @@ The system provides RESTful APIs for communication between the frontend and the 
 ### Web Frontend
 The Web Frontend provides the user interface for the Incident Management System. Users can use the frontend to access the available incident management and administrative functions.
 
-### DOcker Deployment
+### Docker Deployment
 The deploy the complete application Docker Compose and be used. The system consists of seperate containers for the frontend, backend APIs, SQL Server databases and Redis. THis allows the individual services and their dependencies to be deployed and run together as one app.
 
 ## System Requirements
