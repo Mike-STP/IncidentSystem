@@ -8,6 +8,7 @@
 [![Incident API](https://badgen.net/badge/API/Incident/blue)](https://github.com/Mike-STP/IncidentSystem/tree/main/src/IncidentSystem.Api)
 [![User API](https://badgen.net/badge/API/User%20Authentication/blue)](https://github.com/Mike-STP/IncidentSystem/tree/main/src/UserAuthentication.Api)
 [![Logging API](https://badgen.net/badge/API/Logging/blue)](https://github.com/Mike-STP/IncidentSystem/tree/main/src/Logging.Api)
+[![License](https://badgegen.net/badge/License/MIT/green)](https://github.com/Mike-STP/IncidentSystem/tree/main/License)
 
 ## Installation
 
@@ -187,9 +188,8 @@ Ran 298 rules on 88 files: 3 findings.
 Current version: 1.0.0
 This project is currently in version 1. Future updates and additional features can be added, which result in an increase of the version number.
 
-## Licence
-### Platzhalter
-Platzhalter
+## License
+This project is licensed under the MIT License.
 
 ## Contributors
 - Mike Stepien / is251024
